@@ -1,9 +1,21 @@
 import {test, expect} from '@playwright/test';
 import {HomePage} from "./pageobjects/home.page";
 import {ParfumPage} from "./pageobjects/parfum.page";
+import {Fields, mandatoryHeaders} from "./utils/structures";
+import {getVisibleFacetsNames} from "./data/fields.api";
 
 let homePage: HomePage;
 let parfumPage: ParfumPage;
+let visibleFacetsNames: string[];
+
+test.beforeAll('Get fields data from response', async ({request}) => {
+    const response = await request.get("https://www.douglas.de/jsapi/v2/products/search/category/01?fields=FULL",
+        {
+            headers: mandatoryHeaders
+        });
+    const json: Fields = await response.json();
+    visibleFacetsNames = getVisibleFacetsNames(json);
+});
 
 test.beforeEach(async ({page}) => {
     homePage = new HomePage(page);
