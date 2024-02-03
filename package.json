@@ -1,0 +1,16 @@
+{
+  "name": "exercise-douglas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Mateusz Sanko",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.41.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.2",
+    "@types/node": "^20.11.16"
+  }
+}
