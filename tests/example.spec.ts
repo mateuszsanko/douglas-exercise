@@ -10,7 +10,7 @@ test.beforeEach(async ({page}) => {
     parfumPage = new ParfumPage(page);
 });
 
-test.only('Update JSON data @preconditions', async ({page}) => {
+test('Update JSON data @preconditions', async ({page}) => {
     await homePage.goto()
     await expect(homePage.cookiesModal.component).toBeVisible();
     await homePage.cookiesModal.acceptAll.click();
