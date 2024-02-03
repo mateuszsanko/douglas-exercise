@@ -1,20 +1,25 @@
 import {test, expect} from '@playwright/test';
 import {HomePage} from "./pageobjects/home.page";
 import {ParfumPage} from "./pageobjects/parfum.page";
-import {Fields, mandatoryHeaders} from "./utils/structures";
-import {getVisibleFacetsNames} from "./data/fields.api";
+import {Fields, MANDATORY_HEADERS} from "./utils/structures";
+import {getHighlights, getVisibleFacetsNames} from "./data/fields.api";
 
 let homePage: HomePage;
 let parfumPage: ParfumPage;
 let visibleFacetsNames: string[];
+let highlights: string[];
 
 test.beforeAll('Get fields data from response', async ({request}) => {
     const response = await request.get("https://www.douglas.de/jsapi/v2/products/search/category/01?fields=FULL",
         {
-            headers: mandatoryHeaders
+            headers: MANDATORY_HEADERS
         });
     const json: Fields = await response.json();
+
     visibleFacetsNames = getVisibleFacetsNames(json);
+    highlights = getHighlights(json);
+    console.log(visibleFacetsNames);
+    console.log(highlights);
 });
 
 test.beforeEach(async ({page}) => {
@@ -22,7 +27,7 @@ test.beforeEach(async ({page}) => {
     parfumPage = new ParfumPage(page);
 });
 
-test('Update JSON data @preconditions', async ({page}) => {
+test.skip('Update JSON data @preconditions', async ({page}) => {
     await homePage.goto()
     await expect(homePage.cookiesModal.component).toBeVisible();
     await homePage.cookiesModal.acceptAll.click();

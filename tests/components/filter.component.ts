@@ -29,10 +29,23 @@ export class FilterComponent {
         return this.all.getByText(name);
     }
 
+    /**
+     * Retrieves the checkbox from the context menu (dropdown).
+     *
+     * @param {string} name - the name next to the checkbox
+     * @return {Locator} the located checkbox element
+     */
     getCheckboxFromContextMenu(name: string): Locator {
         return this.items.filter({hasText: name}).locator("div.facet-option__checkbox");
     }
 
+    /**
+     * Chooses a category and click the item on the dropdown list.
+     *
+     * @param {string} categoryName - the name of the category
+     * @param {string} itemName - the name of the item to choose
+     * @return {Promise<void>} a Promise that resolves when the actions are complete
+     */
     async chooseItemFromCategory(categoryName: string, itemName: string): Promise<void> {
         await this.getByName(categoryName).click();
         await expect(this.openedTitle).toHaveText("Produktart");
