@@ -50,7 +50,7 @@ export class FilterComponent {
         await this.getByName(categoryName).click();
         await expect(this.openedTitle).toHaveText("Produktart");
         await this.getCheckboxFromContextMenu(itemName).click();
-        await expect(this.getCheckboxFromContextMenu("Eau de Parfum")).toBeChecked();
+        await expect(this.getCheckboxFromContextMenu(itemName)).toBeChecked();
         await this.closeButton.click();
         await expect(this.search).not.toBeVisible();
     }

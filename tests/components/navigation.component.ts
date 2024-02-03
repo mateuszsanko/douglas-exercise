@@ -1,4 +1,4 @@
-import {Page} from "@playwright/test";
+import {expect, Page} from "@playwright/test";
 import {HeaderComponent} from "./header.component";
 import {Locator} from "playwright";
 
@@ -32,8 +32,9 @@ export class NavigationComponent {
      */
     async clickLink(name: string): Promise<void> {
         const headerComponent = new HeaderComponent(this.page);
+        await expect(this.getLink(name)).toBeVisible();
         await this.getLink(name).click();
-        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForLoadState('load');
         await headerComponent.logo.hover();
     }
 }

@@ -12,6 +12,7 @@ export function getVisibleFacetsNames(json: Fields): string[] {
     return visibleFacets.map((facet) => facet.name);
 }
 
+
 /**
  * Retrieves the highlights from the given JSON object.
  *

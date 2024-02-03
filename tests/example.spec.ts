@@ -18,22 +18,13 @@ test.beforeAll('Get fields data from response', async ({request}) => {
 
     visibleFacetsNames = getVisibleFacetsNames(json);
     highlights = getHighlights(json);
-    console.log(visibleFacetsNames);
-    console.log(highlights);
+    // console.log(visibleFacetsNames);
+    // console.log(highlights);
 });
 
 test.beforeEach(async ({page}) => {
     homePage = new HomePage(page);
     parfumPage = new ParfumPage(page);
-});
-
-test.skip('Update JSON data @preconditions', async ({page}) => {
-    await homePage.goto()
-    await expect(homePage.cookiesModal.component).toBeVisible();
-    await homePage.cookiesModal.acceptAll.click();
-    await expect(homePage.cookiesModal.component).not.toBeVisible();
-    await homePage.navigation.clickLink("PARFUM");
-    await parfumPage.filter.iterateCategoriesAndUpdateJson();
 });
 
 test('get started link', async ({page}) => {
