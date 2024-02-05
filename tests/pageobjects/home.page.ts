@@ -1,4 +1,4 @@
-import {Page} from "@playwright/test";
+import {expect, Page} from "@playwright/test";
 import {CookiesComponent} from "../components/cookies.component";
 import {HeaderComponent} from "../components/header.component";
 import {NavigationComponent} from "../components/navigation.component";
@@ -25,5 +25,12 @@ export class HomePage {
     async goto(): Promise<void> {
         await this.page.goto(HomePage.URL);
         await this.page.waitForLoadState("domcontentloaded");
+    }
+
+    async navigateToSubpage(name: string): Promise<void> {
+        await expect(this.cookiesModal.component).toBeVisible();
+        await this.cookiesModal.acceptAll.click();
+        await expect(this.cookiesModal.component).not.toBeVisible();
+        await this.navigation.clickLink("PARFUM");
     }
 }

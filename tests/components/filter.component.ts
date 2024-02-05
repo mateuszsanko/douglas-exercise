@@ -48,11 +48,25 @@ export class FilterComponent {
      */
     async chooseItemFromCategory(categoryName: string, itemName: string): Promise<void> {
         await this.getByName(categoryName).click();
-        await expect(this.openedTitle).toHaveText("Produktart");
+        await expect(this.openedTitle).toHaveText(categoryName);
         await this.getCheckboxFromContextMenu(itemName).click();
         await expect(this.getCheckboxFromContextMenu(itemName)).toBeChecked();
         await this.closeButton.click();
         await expect(this.search).not.toBeVisible();
+    }
+
+    async isItemInCategoryDropdown(categoryName: string, itemName: string): Promise<boolean> {
+        await this.getByName(categoryName).click();
+        await expect(this.openedTitle).toHaveText(categoryName);
+        const items = await this.items.allTextContents();
+        const clearItems = items.map((item: string) => {
+            return item.replace(/[0-9()]/g, "").trim();
+        })
+        const result = clearItems.includes(itemName);
+        console.log("result", result);
+        console.log("clearItems", clearItems);
+        await this.closeButton.click();
+        return result;
     }
 
     /**

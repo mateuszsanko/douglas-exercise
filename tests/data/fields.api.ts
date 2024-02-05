@@ -23,3 +23,12 @@ export function getHighlights(json: Fields): Array<string> {
     const highlights = json.facets.filter((facet) => facet.name == "Highlights");
     return highlights[0].values.map((value) => value.name);
 }
+
+export function getFacetsAndValuesFromJson(json: Fields): Map<string, string[]> {
+    const facets = new Map<string, string[]>();
+    json.facets.forEach((facet) => {
+        facets.set(facet.name, facet.values.map((value) => value.name));
+    });
+    return facets;
+}
+

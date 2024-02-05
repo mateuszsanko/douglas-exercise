@@ -7,6 +7,11 @@ export const MANDATORY_HEADERS = {
     "Connection": "keep-alive"
 }
 
+export interface FacetWithValues {
+    facetName: string;
+    facetValues: string[];
+}
+
 export interface Fields {
     freeTextSearch: string;
     categoryCode: string;
