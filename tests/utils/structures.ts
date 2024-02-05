@@ -12,6 +12,25 @@ export interface FacetWithValues {
     facetValues: string[];
 }
 
+export type Criteria = Sale | Neu | Limitiert;
+
+export interface Highlights {
+    produktart: string;
+    furWen: string
+}
+export interface Sale extends Highlights {
+    marke: string;
+}
+
+export interface Neu extends Highlights {
+
+}
+
+export interface Limitiert {
+    marke: string;
+    geschenkfur: string;
+}
+
 export interface Fields {
     freeTextSearch: string;
     categoryCode: string;

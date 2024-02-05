@@ -1,7 +1,7 @@
 import {test, expect} from "@playwright/test";
 import {HomePage} from "./pageobjects/home.page";
 import {ParfumPage} from "./pageobjects/parfum.page";
-import {FacetWithValues, Fields, MANDATORY_HEADERS} from "./utils/structures";
+import {Criteria, FacetWithValues, Fields, MANDATORY_HEADERS, Neu} from "./utils/structures";
 import {getFacetsAndValuesFromJson, getHighlights, getVisibleFacetsNames} from "./data/fields.api";
 
 let homePage: HomePage;
@@ -30,14 +30,10 @@ const positiveTestFacetsMap = new Map<string, string>([
     ["Produktart", "Eau de Parfum"]
 ]);
 
-test.only('@positive choose items from category', async ({page}) => {
+test('@positive choose items from category', async ({page}) => {
     await homePage.goto()
 
-    await expect(homePage.cookiesModal.component).toBeVisible();
-    await homePage.cookiesModal.acceptAll.click();
-    await expect(homePage.cookiesModal.component).not.toBeVisible();
-    await homePage.navigation.clickLink("PARFUM");
-    await page.waitForLoadState('load');
+    await homePage.navigateToSubpage("PARFUM");
 
     for (const facet of positiveTestFacetsMap) {
         const facetName = facet[0];
@@ -48,23 +44,26 @@ test.only('@positive choose items from category', async ({page}) => {
     }
 });
 
-const negativeValuesTestFacetsMap = new Map<string, string>([
+const negativeTestFacetsMap = new Map<string, string>([
     ["Produktart", "Fake item"]
 ])
 
-test('@negative test', async ({page}) => {
-    await homePage.goto();
-    await expect(homePage.cookiesModal.component).toBeVisible();
-    await homePage.cookiesModal.acceptAll.click();
-    await expect(homePage.cookiesModal.component).not.toBeVisible();
-    await homePage.navigation.clickLink("PARFUM");
-    await page.waitForLoadState('load');
+const testCriteria: Criteria = {produktart: "test", furWen: "test"} as Neu
 
-    for (const facet of negativeValuesTestFacetsMap) {
+test.skip("check typeof facets", async ({page}) => {
+    console.log(typeof testCriteria);
+
+});
+
+test('@negative item should not be in category dropdown', async ({page}) => {
+    await homePage.goto();
+
+    await homePage.navigateToSubpage("PARFUM");
+
+    for (const facet of negativeTestFacetsMap) {
         const facetName = facet[0];
         const facetValue = facet[1];
         expect(allFacetsWithValues.get(facetName)).not.toContain(facetValue);
-        console.log(parfumPage.filter.isItemInCategoryDropdown(facetName, facetValue));
-        expect(parfumPage.filter.isItemInCategoryDropdown(facetName, facetValue)).toBeFalsy();
+        expect(await parfumPage.filter.isItemInCategoryDropdown(facetName, facetValue)).toBeFalsy();
     }
 })

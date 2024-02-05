@@ -35,6 +35,7 @@ export class NavigationComponent {
         await expect(this.getLink(name)).toBeVisible();
         await this.getLink(name).click();
         await this.page.waitForLoadState('load');
+        await this.page.waitForLoadState('domcontentloaded');
         await headerComponent.logo.hover();
     }
 }

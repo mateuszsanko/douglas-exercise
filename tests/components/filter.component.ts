@@ -22,7 +22,11 @@ export class FilterComponent {
         this.titles = this.all.locator("div.facet__title:not(.facet-wrapper--hidden)");
         this.search = this.openedTitle.getByPlaceholder('Produktmerkmal suchen');
         this.items = this.component.locator("a.facet-option.active");
-        this.closeButton = this.component.getByRole("button", {name: "Schließen"});
+        this.closeButton = this.component.locator("button.facet__close-button");
+    }
+
+    isDisplayed() {
+        return this.component.isVisible();
     }
 
     getByName(name: string): Locator {
@@ -35,8 +39,10 @@ export class FilterComponent {
      * @param {string} name - the name next to the checkbox
      * @return {Locator} the located checkbox element
      */
-    getCheckboxFromContextMenu(name: string): Locator {
-        return this.items.filter({hasText: name}).locator("div.facet-option__checkbox");
+    async clickCheckboxFromContextMenu(name: string): Promise<void> {
+        await expect(this.items.filter({hasText: name}).locator("div.facet-option__checkbox")).not.toBeChecked();
+        await this.items.filter({hasText: name}).locator("div.facet-option__checkbox").click();
+        await this.page.waitForLoadState("domcontentloaded");
     }
 
     /**
@@ -47,11 +53,11 @@ export class FilterComponent {
      * @return {Promise<void>} a Promise that resolves when the actions are complete
      */
     async chooseItemFromCategory(categoryName: string, itemName: string): Promise<void> {
+        await expect(this.titles.first()).toBeVisible();
         await this.getByName(categoryName).click();
         await expect(this.openedTitle).toHaveText(categoryName);
-        await this.getCheckboxFromContextMenu(itemName).click();
-        await expect(this.getCheckboxFromContextMenu(itemName)).toBeChecked();
-        await this.closeButton.click();
+        await this.clickCheckboxFromContextMenu(itemName);
+        this.closeButton.isVisible ? await this.closeButton.click() : undefined;
         await expect(this.search).not.toBeVisible();
     }
 
@@ -63,8 +69,6 @@ export class FilterComponent {
             return item.replace(/[0-9()]/g, "").trim();
         })
         const result = clearItems.includes(itemName);
-        console.log("result", result);
-        console.log("clearItems", clearItems);
         await this.closeButton.click();
         return result;
     }

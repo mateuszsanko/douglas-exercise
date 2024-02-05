@@ -31,6 +31,9 @@ export class HomePage {
         await expect(this.cookiesModal.component).toBeVisible();
         await this.cookiesModal.acceptAll.click();
         await expect(this.cookiesModal.component).not.toBeVisible();
+        await this.page.waitForLoadState('domcontentloaded');
         await this.navigation.clickLink("PARFUM");
+        await this.page.waitForLoadState('load');
+        await this.page.waitForLoadState('domcontentloaded');
     }
 }
